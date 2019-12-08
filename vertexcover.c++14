@@ -1,0 +1,87 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define maxx 30
+int adj[maxx][maxx];
+int deg[maxx];
+
+int main()
+{
+    fill(deg,deg+maxx,0);
+     int v,e;
+     int ans=0;
+//enter the number of vertex and edge     
+ cin>>v>>e;
+     for(int i=0;i<v;i++)
+     {
+         for(int j=0;j<v;j++)
+         {
+             adj[i][j]=0;
+         }
+     }
+//input
+     for(int i=0;i<e;i++)
+     {
+         int a,b;
+         cin>>a>>b;
+        if(a!=b)
+        {
+             adj[a][b]=1;
+         adj[b][a]=1;
+        }
+        else
+        {
+            adj[a][a]=1;
+        }
+         deg[a]++;
+         deg[b]++;
+
+     }
+     int cnt_edge=0;
+// loop till all edges are covered
+     while(cnt_edge<e)
+     {
+
+         int minn=INT_MAX,pos;
+// find the vertex with minimum degree
+         for(int i=0;i<v;i++)
+         {
+            if(minn>deg[i] &&deg[i]>0)
+            {
+                minn=deg[i];
+                pos=i;
+            }
+         }
+        // cout<<minn<<endl;
+         int maxx_edge=INT_MIN,poss;
+// finding the vertex with maximum degree adjacent to that vertex..
+         for(int i=0;i<v;i++)
+         {
+             if(adj[pos][i]==1)
+             if(maxx_edge<deg[i])
+             {
+                   maxx_edge=deg[i];
+                 poss=i;
+             }
+         }
+         //cout<<maxx_edge<<endl;
+//relaxing the degreee count of each vertex and remove edge between them
+         for(int i=0;i<v;i++)
+         {
+            if(adj[poss][i]==1)
+            {
+                deg[i]--;
+                deg[poss]--;
+                adj[i][poss]=0;
+                adj[poss][i]=0;
+                cnt_edge++;
+
+            }
+         }
+// number of such vertex found
+         ans++;
+     }
+
+cout<<"MIN VERTEX COVER \n"<<ans;
+
+}
